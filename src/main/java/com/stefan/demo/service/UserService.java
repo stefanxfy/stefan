@@ -2,6 +2,7 @@ package com.stefan.demo.service;
 
 
 import com.stefan.demo.dao.UserRepository;
+import com.stefan.demo.enums.ResultEnum;
 import com.stefan.demo.exception.MyException;
 import com.stefan.demo.pojo.user;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,9 @@ public class UserService {
         user user=ur.findByName(name);
         Integer age=user.getAge();
         if (age<30){
-            throw new MyException(100,"你正处于职业发展期");
+            throw new MyException(ResultEnum.YOUNG);
         }else if (age>50){
-            throw new MyException(101,"你马上就要退休了");
+            throw new MyException(ResultEnum.OLD);
         }
     }
 }

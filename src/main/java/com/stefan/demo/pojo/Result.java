@@ -15,6 +15,11 @@ public class Result<T> {
     public Result() {
     }
 
+    public Result(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
     public Integer getCode() {
         return code;
     }

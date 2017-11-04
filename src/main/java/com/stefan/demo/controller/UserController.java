@@ -19,7 +19,7 @@ public class UserController {
     @GetMapping("/save")
     public Result<user> save(@Valid   user user,BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            return ResultUtil.error(1,bindingResult.getFieldError().getDefaultMessage());
+            return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
         }
         return ResultUtil.success(us.addUser(user));
     }
