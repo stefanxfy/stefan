@@ -6,10 +6,7 @@ import com.stefan.demo.service.UserService;
 import com.stefan.demo.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,12 +24,16 @@ public class UserController {
         return ResultUtil.success(us.addUser(user));
     }
     @GetMapping("/getUsers")
-    public List<user> getUsers(@RequestParam("name") String name) throws Exception {
+    public user getUsers(@RequestParam("name") String name) throws Exception {
         return us.findByName(name);
     }
     @GetMapping("/get")
     public List<user> get(){
         return us.findUserList();
+    }
+    @GetMapping("/getAge")
+    public void  getAge(@PathVariable("name") String name) throws Exception {
+        us.getAge(name);
     }
 
 
