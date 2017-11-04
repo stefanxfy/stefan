@@ -32,7 +32,7 @@ public class UserController {
         return us.findUserList();
     }
     @GetMapping("/getAge")
-    public void  getAge(@PathVariable("name") String name) throws Exception {
+    public void  getAge(String name) throws Exception {
         us.getAge(name);
     }
 
