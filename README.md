@@ -1,11 +1,11 @@
-#第一个比较系统的springboot的一个测试项目
-=
-------
-涉及的知识有日志的打印、表单的验证、异常的统一处理
--
-##日志的打印：涉及AOP、Logger
-省略导包
+##  **第一个比较系统的springboot的一个测试项目**
 
+### 涉及的知识有==日志的打印==、==表单的验证==、==异常的统一处理==
+
+###### 省略导包和getter、setter
+
+#### 日志的打印：涉及AOP、Logger
+```
 @Aspect
 @Component
 public class HttpAspect {
@@ -39,16 +39,20 @@ public class HttpAspect {
         logger.info("response={}",object.toString());
     }
 }
+```
 
-#表单的验证
-第一步，先在实体类里加验证注释
 
-@Size
-@Min
-@Max
-@Pattern
+##### 表单的验证
+#####  第一步，先在实体类里加验证注释
+
+- @Size
+- @Min
+- @Max
+- @Pattern
 。。。。
 
+
+```
 @Table(name="t_user")
 @Entity
 public class user {
@@ -67,9 +71,12 @@ public class user {
     private String phone;
     #省略getter、setter方法
 }
+```
 
-第二步：在UserController里相应方法形参里加@Valid
+#### 第二步：在UserController里相应方法形参里加@Valid
 
+
+```
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -83,11 +90,13 @@ UserService us;
         return ResultUtil.success(us.addUser(user));
     }
 }
+```
 
-#异常统一处理（涉及到新建自定义异常类、管理错误编号、统一格式返回信息）
+
+#### 异常统一处理（涉及到新建自定义异常类、管理错误编号、统一格式返回信息）
 统一的返回信息样式（save）
-成功的：
-
+##### 成功的：
+```
 {
     "code": 0,
     "msg": "成功",
@@ -100,18 +109,24 @@ UserService us;
         "phone": null
     }
 }
+```
+##### 失败的：
 
-失败的：
 
+```
 {
     "code": 1,
     "msg": "姓名长度必须大于 2 且小于 20 字",
     "data": null
 }
+```
 
-统一异常处理具体步骤
-#第一步：新建一个统一返回信息的类
 
+#### 统一异常处理具体步骤
+##### 第一步：新建一个统一返回信息的类
+
+
+```
 public class Result<T> {
     //错误码
     private Integer code;
@@ -126,8 +141,12 @@ public class Result<T> {
         this.msg = msg;
     }
 }
-#第二步：新建一个统一管理异常编号的枚举类
+```
+
+##### 第二步：新建一个统一管理异常编号的枚举类
     
+
+```
 public enum ResultEnum {
     UNKNOW_ERROR(-1,"未知错误"),
     SUCCESS(0, "成功"),
@@ -148,9 +167,13 @@ public enum ResultEnum {
         return msg;
     }
 }
+```
 
-#第三步：新建一个处理返回数据的类（定义成功返回，失败返回方法）
 
+##### 第三步：新建一个处理返回数据的类（定义成功返回，失败返回方法）
+
+
+```
 public class ResultUtil {
     public static Result success(Object object){
         Result result = new Result();
@@ -175,9 +198,13 @@ public class ResultUtil {
         return result;
     }
 }
+```
 
-#第四步:自定义一个异常类（extends RuntimeException）
 
+##### 第四步:自定义一个异常类（extends RuntimeException）
+
+
+```
 public class MyException extends RuntimeException {
     private Integer code;
     public MyException(ResultEnum re) {
@@ -191,8 +218,12 @@ public class MyException extends RuntimeException {
         this.code = code;
     }
 }
-#第五步：新建一个处理刚才自定义异常的类
+```
 
+##### 第五步：新建一个处理刚才自定义异常的类
+
+
+```
 @ControllerAdvice
 public class ExceptionHandle {
     private final static Logger logger = LoggerFactory.getLogger(ExceptionHandle.class);
@@ -209,8 +240,9 @@ public class ExceptionHandle {
         }
     }
 }
+```
 
-这个springboot项目还是十分简陋的，笔者也在学习当中，关于springboot的实战知识会不断更新，希望能够跟外界有个很好的交流。
+#### 这个springboot项目还是十分简陋的，笔者也在学习当中，==关于springboot的实战知识会不断更新==，希望能够跟外界有个很好的交流。
 
 
 
