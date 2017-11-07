@@ -42,7 +42,7 @@ public class HttpAspect {
 ```
 
 
-##### 表单的验证
+#### 表单的验证
 #####  第一步，先在实体类里加验证注释
 
 - @Size
@@ -73,7 +73,7 @@ public class user {
 }
 ```
 
-#### 第二步：在UserController里相应方法形参里加@Valid
+##### 第二步：在UserController里相应方法形参里加@Valid
 
 
 ```
@@ -242,7 +242,7 @@ public class ExceptionHandle {
 }
 ```
 
-#### 这个springboot项目还是十分简陋的，笔者也在学习当中，==关于springboot的实战知识会不断更新==，希望能够跟外界有个很好的交流。
+#### 这个springboot项目还是十分简陋的，笔者也在学习当中，关于springboot的实战知识会不断更新，希望能够跟外界有个很好的交流。
 
 
 
