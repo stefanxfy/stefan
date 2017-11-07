@@ -1,7 +1,8 @@
 #第一个比较系统的springboot的一个测试项目
 涉及的知识有日志的打印、表单的验证、异常的统一处理
 日志的打印：涉及AOP、Logger
-#省略导包
+省略导包
+
 @Aspect
 @Component
 public class HttpAspect {
@@ -11,7 +12,6 @@ public class HttpAspect {
     }
     @Before("log()")
     public void doBefore(JoinPoint joinPoint){
-
         ServletRequestAttributes attributes= (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request=attributes.getRequest();
         //url
@@ -30,9 +30,7 @@ public class HttpAspect {
     @After("log()")
     public void doAfter(){
         System.out.println("后aop");
-
     }
-
     @AfterReturning(returning = "object",pointcut = "log()")
     public void doAfterReturning(Object object){
         logger.info("response={}",object.toString());
@@ -41,6 +39,7 @@ public class HttpAspect {
 
 #表单的验证
 第一步，先在实体类里加验证注释
+
 @Size
 @Min
 @Max
@@ -65,7 +64,9 @@ public class user {
     private String phone;
     #省略getter、setter方法
 }
+
 第二步：在UserController里相应方法形参里加@Valid
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -83,6 +84,7 @@ UserService us;
 #异常统一处理（涉及到新建自定义异常类、管理错误编号、统一格式返回信息）
 统一的返回信息样式（save）
 成功的：
+
 {
     "code": 0,
     "msg": "成功",
@@ -97,6 +99,7 @@ UserService us;
 }
 
 失败的：
+
 {
     "code": 1,
     "msg": "姓名长度必须大于 2 且小于 20 字",
@@ -105,6 +108,7 @@ UserService us;
 
 统一异常处理具体步骤
 #第一步：新建一个统一返回信息的类
+
 public class Result<T> {
     //错误码
     private Integer code;
@@ -112,16 +116,15 @@ public class Result<T> {
     private String msg;
     //具体的内容
     private T data;
-
     public Result() {
     }
-
     public Result(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 }
 #第二步：新建一个统一管理异常编号的枚举类
+    
 public enum ResultEnum {
     UNKNOW_ERROR(-1,"未知错误"),
     SUCCESS(0, "成功"),
@@ -131,7 +134,6 @@ public enum ResultEnum {
     ;
     private  Integer code;
     private String msg;
-
     ResultEnum(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
@@ -145,6 +147,7 @@ public enum ResultEnum {
 }
 
 #第三步：新建一个处理返回数据的类（定义成功返回，失败返回方法）
+
 public class ResultUtil {
     public static Result success(Object object){
         Result result = new Result();
@@ -152,7 +155,6 @@ public class ResultUtil {
         result.setMsg(ResultEnum.SUCCESS.getMsg());
         result.setData(object);
         return result;
-
     }
     public static Result success() {
         return success(null);
@@ -172,9 +174,9 @@ public class ResultUtil {
 }
 
 #第四步:自定义一个异常类（extends RuntimeException）
+
 public class MyException extends RuntimeException {
     private Integer code;
-    
     public MyException(ResultEnum re) {
         super(re.getMsg());
         this.code = re.getCode();
@@ -187,6 +189,7 @@ public class MyException extends RuntimeException {
     }
 }
 #第五步：新建一个处理刚才自定义异常的类
+
 @ControllerAdvice
 public class ExceptionHandle {
     private final static Logger logger = LoggerFactory.getLogger(ExceptionHandle.class);
@@ -196,7 +199,6 @@ public class ExceptionHandle {
         if (e instanceof MyException){
             MyException myException=(MyException) e;
             return ResultUtil.error(e.getMessage());
-
         }else{
             logger.error("【系统异常】{}", e);
             return ResultUtil.error(ResultEnum.UNKNOW_ERROR);
